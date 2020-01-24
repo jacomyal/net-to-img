@@ -1,0 +1,25 @@
+{
+  "name": "net-to-img",
+  "version": "0.1.0",
+  "description": "A CLI tool to quickly render a network's topology as an image",
+  "main": "index.js",
+  "bin": {
+    "net-to-img": "./index.js"
+  },
+  "keywords": [
+    "graph",
+    "graphology",
+    "image"
+  ],
+  "author": "Alexis Jacomy",
+  "license": "MIT",
+  "dependencies": {
+    "graphml-js": "^0.4.0",
+    "graphology": "^0.14.1",
+    "graphology-canvas": "^0.1.1",
+    "graphology-communities-louvain": "^0.1.1",
+    "graphology-gexf": "^0.5.0",
+    "graphology-layout-forceatlas2": "^0.3.1",
+    "yargs": "^15.1.0"
+  }
+}
