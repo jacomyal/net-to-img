@@ -35,6 +35,7 @@ const fs = require("fs");
 const path = require("path");
 const graphml = require("graphml-js");
 const Graph = require("graphology");
+const iwanthue = require("iwanthue");
 const gexf = require("graphology-gexf");
 const render = require("graphology-canvas");
 const forceAtlas2 = require("graphology-layout-forceatlas2");
@@ -88,9 +89,18 @@ function processGraph({ graph }, callback) {
   if (colorize) {
     louvain.assign(graph);
 
-    const colors = {};
+    const communitiesSet = {};
+    graph.forEachNode((_, { community }) => {
+      communitiesSet[community] = true;
+    });
+    const communities = Object.keys(communitiesSet);
+
+    const colors = iwanthue(communities.length).reduce((iter, color, i) => {
+      iter[communities[i]] = color;
+      return iter;
+    }, {});
+
     graph.forEachNode((node, { community }) => {
-      if (!colors[community]) colors[community] = getRandomColor();
       graph.setNodeAttribute(node, "color", colors[community]);
     });
   }
