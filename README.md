@@ -10,7 +10,7 @@ npm install --global net-to-img
 
 ## Usage
 
-At the moment, `net-to-img` only supports [GraphML](https://en.wikipedia.org/wiki/GraphML) and [GEXF](https://gephi.org/gexf/format/) formats, and only writes images as PNG images:
+At the moment, `net-to-img` only supports [GraphML](https://en.wikipedia.org/wiki/GraphML), [GEXF](https://gephi.org/gexf/format/) and [JSON for Graphology](https://graphology.github.io/serialization.html#format) formats, and only writes images as PNG images:
 
 ```bash
 net-to-img path/to/graph/file path/to/output/image
@@ -29,7 +29,7 @@ This tool has been developped quite quickly (thanks for all the job previously d
 - Errors management
 - Stronger GraphML parser
 - Louvain multi-graph support
-- Auto sizes for nodes
-- More graph formats (GML, JSON...)
+- ~~Auto sizes for nodes~~
+- More graph formats (GML, ~~JSON~~...)
 - More image formats (JPG, SVG...)
 - ...
