@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const argv = require("yargs")
+  // Main parameters:
   .usage("Usage: $0 [OPTIONS] SOURCE DEST")
   .demandCommand(2, 2)
   .describe(
@@ -7,23 +8,36 @@ const argv = require("yargs")
     "Path of the input graph file (accepts .GEXF and .GRAPHML files only)"
   )
   .describe("DEST", "Path of the output file (only .PNG supported yet)")
-  .alias("c", "colorize")
-  .describe("c", "Colorize nodes by communities (using Louvain)")
-  .default("c", true)
-  .alias("l", "layout")
-  .describe("layout", "Randomizes layout and apply ForceAtlas 2")
-  .default("layout", true)
-  .describe("steps", "Number of ForceAtlas 2 iterations to perform")
-  .default("steps", 100)
-  .alias("s", "size")
-  .describe("size", "Size of the nodes in the output image")
-  .default("size", 1)
-  .alias("w", "width")
-  .describe("width", "Width of the output file")
-  .default("w", 2048)
-  .alias("h", "height")
-  .describe("height", "height of the output file")
-  .default("h", 2048).argv;
+  // Options:
+  .options({
+    colorize: {
+      alias: "c",
+      description: "Colorize nodes by communities (using Louvain)",
+      default: true
+    },
+    layout: {
+      alias: "l",
+      description: "Randomizes layout and apply ForceAtlas 2",
+      default: true
+    },
+    steps: {
+      description: "Number of ForceAtlas 2 iterations to perform",
+      default: 100
+    },
+    size: {
+      alias: "s",
+      description: "Size of the nodes in the output image",
+      decault: 1
+    },
+    width: {
+      description: "Width of the output file",
+      default: 2048
+    },
+    height: {
+      description: "height of the output file",
+      default: 2048
+    }
+  }).argv;
 
 const [sourcePath, destPath] = argv._;
 const { steps, size, width, height } = argv;
