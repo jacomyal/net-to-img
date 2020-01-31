@@ -27,7 +27,6 @@ const argv = require("yargs")
 
 const [sourcePath, destPath] = argv._;
 const { steps, size, width, height } = argv;
-
 const FALSES = ["false", "f", "FALSE", "F"];
 const colorize = FALSES.includes(argv.colorize) ? false : argv.colorize;
 const layout = FALSES.includes(argv.layout) ? false : argv.layout;
@@ -102,7 +101,10 @@ function processGraph({ graph }, callback) {
       graph.setNodeAttribute(node, "y", Math.random() * 100);
     });
 
-    forceAtlas2.assign(graph, { iterations: steps });
+    forceAtlas2.assign(graph, {
+      iterations: steps,
+      settings: forceAtlas2.inferSettings(graph)
+    });
   }
 
   graph.forEachNode(node => {
