@@ -1,5 +1,16 @@
 #!/usr/bin/env node
-const argv = require("yargs")
+
+// Deps imports:
+const yargs = require("yargs");
+const render = require("graphology-canvas");
+
+// Local imports:
+const layoutFn = require("./layout");
+const colorizeFn = require("./colorize");
+const normalizeFn = require("./normalize");
+const loadGraphFn = require("./loadGraph");
+
+const argv = yargs
   // Main parameters:
   .usage("Usage: $0 [OPTIONS] SOURCE DEST")
   .demandCommand(2, 2)
@@ -21,13 +32,14 @@ const argv = require("yargs")
       default: true
     },
     steps: {
+      alias: "s",
       description: "Number of ForceAtlas 2 iterations to perform",
       default: 100
     },
-    size: {
-      alias: "s",
-      description: "Size of the nodes in the output image",
-      decault: 1
+    seed: {
+      alias: "r",
+      description: 'A seed for RNG (set it to "" or use --no-seed to unset it)',
+      default: "net-to-img"
     },
     width: {
       description: "Width of the output file",
@@ -39,107 +51,31 @@ const argv = require("yargs")
     }
   }).argv;
 
+// Arguments and options:
 const [sourcePath, destPath] = argv._;
-const { steps, size, width, height } = argv;
+const { steps, seed, width, height } = argv;
 const FALSES = ["false", "f", "FALSE", "F"];
 const colorize = FALSES.includes(argv.colorize) ? false : argv.colorize;
 const layout = FALSES.includes(argv.layout) ? false : argv.layout;
 
-const fs = require("fs");
-const path = require("path");
-const graphml = require("graphml-js");
-const Graph = require("graphology");
-const iwanthue = require("iwanthue");
-const gexf = require("graphology-gexf");
-const render = require("graphology-canvas");
-const forceAtlas2 = require("graphology-layout-forceatlas2");
-const louvain = require("graphology-communities-louvain");
+// Actual program:
+loadGraphFn({ sourcePath }, function(err, graph) {
+  if (err) throw new Error(err);
 
-function getRandomColor() {
-  return (
-    "#" +
-    (((1 << 24) * Math.random()) | 0).toString(16) +
-    "000000"
-  ).substr(0, 7);
-}
+  // Graph treatments:
+  let cleanSeed = seed || undefined;
 
-// 1. Load graph file
-function loadGraphMLFile({ sourcePath }, callback) {
-  const graphmlText = fs.readFileSync(sourcePath);
-  const parser = new graphml.GraphMLParser();
-
-  parser.parse(graphmlText, function(err, data) {
-    if (err) return callback(err);
-
-    const graph = new Graph();
-    data.nodes.forEach(node => {
-      graph.addNode(node._id, node._attributes);
-    });
-    data.edges.forEach(edge => {
-      if (!graph.hasEdge(edge._source, edge._target))
-        graph.addEdge(edge._source, edge._target, edge._attributes);
-    });
-
-    callback(err, graph);
-  });
-}
-function loadGEXFFile({ sourcePath }, callback) {
-  callback(null, gexf.parse(Graph, fs.readFileSync(sourcePath, "utf-8")));
-}
-function loadGraphFile({ sourcePath }, callback) {
-  const ext = path.extname(sourcePath).toLowerCase();
-
-  if (ext === ".gexf") {
-    loadGEXFFile({ sourcePath }, callback);
-  } else if (ext === ".graphml") {
-    loadGraphMLFile({ sourcePath }, callback);
-  } else {
-    callback(`File extension ${ext} not recognized.`);
-  }
-}
-
-// 2. Process graph
-function processGraph({ graph }, callback) {
   if (colorize) {
-    louvain.assign(graph);
-
-    const communitiesSet = {};
-    graph.forEachNode((_, { community }) => {
-      communitiesSet[community] = true;
-    });
-    const communities = Object.keys(communitiesSet);
-
-    const colors = iwanthue(communities.length).reduce((iter, color, i) => {
-      iter[communities[i]] = color;
-      return iter;
-    }, {});
-
-    graph.forEachNode((node, { community }) => {
-      graph.setNodeAttribute(node, "color", colors[community]);
-    });
+    colorizeFn(graph, { seed: cleanSeed });
   }
 
   if (layout) {
-    graph.forEachNode(node => {
-      graph.setNodeAttribute(node, "x", Math.random() * 100);
-      graph.setNodeAttribute(node, "y", Math.random() * 100);
-    });
-
-    forceAtlas2.assign(graph, {
-      iterations: steps,
-      settings: forceAtlas2.inferSettings(graph)
-    });
+    layoutFn(graph, { steps, seed: cleanSeed });
   }
 
-  graph.forEachNode(node => {
-    graph.setNodeAttribute(node, "size", size);
-  });
+  normalizeFn(graph);
 
-  callback(null, graph);
-}
-
-// 3. Export img
-function exportImg({ graph, destPath }, callback) {
+  // Render and save img file:
   render(
     graph,
     destPath,
@@ -148,19 +84,7 @@ function exportImg({ graph, destPath }, callback) {
       height
     },
     () => {
-      callback(null, null);
+      // Process ended (callback is mandatory...)
     }
   );
-  callback(null, null);
-}
-
-// 4. Bootstrap
-loadGraphFile({ sourcePath }, function(err, graph) {
-  if (err) throw new Error(err);
-  processGraph({ graph }, function(err, graph) {
-    if (err) throw new Error(err);
-    exportImg({ graph, destPath }, function() {
-      if (err) throw new Error(err);
-    });
-  });
 });
