@@ -1,7 +1,5 @@
 const betweennessCentrality = require("graphology-metrics/centrality/betweenness");
 
-const DEFAULT_ATTRIBUTE_KEY = "net-to-img/betweenness-centrality";
-
 /**
  * This function maps some attribute values to node sizes. If no attribute key
  * is given, will first compute betweenness centrality for each node and use
@@ -9,12 +7,8 @@ const DEFAULT_ATTRIBUTE_KEY = "net-to-img/betweenness-centrality";
  *
  * Mutates the input graph.
  */
-module.exports = function mapSizes(
-  graph,
-  { attributeKey = DEFAULT_ATTRIBUTE_KEY } = {}
-) {
-  // If no attribute key has been specified, compute communities instead:
-  if (attributeKey === DEFAULT_ATTRIBUTE_KEY) {
+function mapSizes(graph, { attributeKey } = {}) {
+  if (attributeKey === mapSizes.DEFAULT_ATTRIBUTE_KEY) {
     betweennessCentrality.assign(graph, {
       attributes: { centrality: attributeKey }
     });
@@ -27,4 +21,7 @@ module.exports = function mapSizes(
       graph.setNodeAttribute(node, "size", !isNaN(val) && val >= 0 ? val : 0);
     });
   }
-};
+}
+
+mapSizes.DEFAULT_ATTRIBUTE_KEY = "net-to-img/betweenness-centrality";
+module.exports = mapSizes;

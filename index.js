@@ -11,25 +11,23 @@ const mapSizesFn = require("./mapSizes");
 const normalizeFn = require("./normalize");
 const loadGraphFn = require("./loadGraph");
 
+const defaultColorizeKey = colorizeFn.DEFAULT_ATTRIBUTE_KEY;
+const defaultMapSizesKey = mapSizesFn.DEFAULT_ATTRIBUTE_KEY;
+
 const argv = yargs
   // Main parameters:
   .usage("Usage: $0 [OPTIONS] SOURCE DEST")
   .demandCommand(2, 2)
   .describe(
     "SOURCE",
-    "Path of the input graph file (accepts .GEXF and .GRAPHML files only)"
+    "Path of the input graph file (accepts .GEXF, .GRAPHML and .JSON files only)"
   )
   .describe("DEST", "Path of the output file (only .PNG supported yet)")
   // Options:
   .options({
-    colorize: {
-      alias: "c",
-      description: "Colorize nodes by communities (using Louvain)",
-      default: true
-    },
     layout: {
       alias: "l",
-      description: "Randomizes layout and apply ForceAtlas 2",
+      description: "Randomizes layout and applies ForceAtlas 2",
       default: true
     },
     steps: {
@@ -37,50 +35,55 @@ const argv = yargs
       description: "Number of ForceAtlas 2 iterations to perform",
       default: 100
     },
+    colorize: {
+      alias: "c",
+      description:
+        "Maps an attribute values to node colors. Uses Louvain communities by default. Use --no-colorize or --no-c to preserve node colors.",
+      default: defaultColorizeKey
+    },
+    "map-sizes": {
+      alias: "m",
+      description:
+        "Maps an attribute values to node sizes. Uses betweenness centrality by default. Use --no-map-sizes or --no-m to preserve node sizes.",
+      default: defaultMapSizesKey
+    },
     seed: {
-      alias: "r",
       description: 'A seed for RNG (set it to "" or use --no-seed to unset it)',
       default: "net-to-img"
     },
-    mapSizes: {
-      alias: "m",
-      description:
-        "An attribute to map node sizes to (will compute betweennessCentrality and use it by default)"
-    },
     width: {
-      description: "Width of the output file",
+      alias: "w",
+      description: "Width of the output image",
       default: 2048
     },
     height: {
-      description: "height of the output file",
+      alias: "h",
+      description: "height of the output image",
       default: 2048
     }
   }).argv;
 
 // Arguments and options:
 const [sourcePath, destPath] = argv._;
-const { steps, seed, width, height, mapSizes } = argv;
-const FALSES = ["false", "f", "FALSE", "F"];
-const colorize = FALSES.includes(argv.colorize) ? false : argv.colorize;
-const layout = FALSES.includes(argv.layout) ? false : argv.layout;
+const { steps, width, height, colorize, layout } = argv;
+const mapSizes = argv["map-sizes"];
+const seed = argv.seed || undefined;
 
 // Actual program:
 loadGraphFn({ sourcePath }, function(err, graph) {
   if (err) throw new Error(err);
 
   // Graph treatments:
-  let cleanSeed = seed || undefined;
-
-  if (colorize) {
-    colorizeFn(graph, { seed: cleanSeed });
+  if (colorize !== false) {
+    colorizeFn(graph, { attributeKey: colorize, seed });
   }
 
   if (mapSizes !== false) {
     mapSizesFn(graph, { attributeKey: mapSizes });
   }
 
-  if (layout) {
-    layoutFn(graph, { steps, seed: cleanSeed });
+  if (layout !== false) {
+    layoutFn(graph, { steps, seed });
   }
 
   normalizeFn(graph);

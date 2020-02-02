@@ -7,11 +7,9 @@ const louvain = require("graphology-communities-louvain");
  *
  * Mutates the input graph.
  */
-module.exports = function colorize(graph, { attributeKey, seed } = {}) {
-  // If no attribute key has been specified, compute communities instead:
-  if (!attributeKey) {
-    attributeKey = "community";
-    louvain.assign(graph);
+function colorize(graph, { attributeKey, seed } = {}) {
+  if (attributeKey === colorize.DEFAULT_ATTRIBUTE_KEY) {
+    louvain.assign(graph, { attributes: { community: attributeKey } });
   }
 
   const valuesSet = {};
@@ -20,15 +18,18 @@ module.exports = function colorize(graph, { attributeKey, seed } = {}) {
   });
   const values = Object.keys(valuesSet);
 
-  const colors = iwanthue(values.length, seed ? { seed } : undefined).reduce(
-    (iter, color, i) => {
-      iter[values[i]] = color;
-      return iter;
-    },
-    {}
-  );
+  const colors = (values.length > 1
+    ? iwanthue(values.length, seed ? { seed } : undefined)
+    : ["grey"]
+  ).reduce((iter, color, i) => {
+    iter[values[i]] = color;
+    return iter;
+  }, {});
 
   graph.forEachNode((node, attributes) => {
     graph.setNodeAttribute(node, "color", colors[attributes[attributeKey]]);
   });
-};
+}
+
+colorize.DEFAULT_ATTRIBUTE_KEY = "net-to-img/community";
+module.exports = colorize;
