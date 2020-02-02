@@ -7,6 +7,7 @@ const render = require("graphology-canvas");
 // Local imports:
 const layoutFn = require("./layout");
 const colorizeFn = require("./colorize");
+const mapSizesFn = require("./mapSizes");
 const normalizeFn = require("./normalize");
 const loadGraphFn = require("./loadGraph");
 
@@ -41,6 +42,11 @@ const argv = yargs
       description: 'A seed for RNG (set it to "" or use --no-seed to unset it)',
       default: "net-to-img"
     },
+    mapSizes: {
+      alias: "m",
+      description:
+        "An attribute to map node sizes to (will compute betweennessCentrality and use it by default)"
+    },
     width: {
       description: "Width of the output file",
       default: 2048
@@ -53,7 +59,7 @@ const argv = yargs
 
 // Arguments and options:
 const [sourcePath, destPath] = argv._;
-const { steps, seed, width, height } = argv;
+const { steps, seed, width, height, mapSizes } = argv;
 const FALSES = ["false", "f", "FALSE", "F"];
 const colorize = FALSES.includes(argv.colorize) ? false : argv.colorize;
 const layout = FALSES.includes(argv.layout) ? false : argv.layout;
@@ -67,6 +73,10 @@ loadGraphFn({ sourcePath }, function(err, graph) {
 
   if (colorize) {
     colorizeFn(graph, { seed: cleanSeed });
+  }
+
+  if (mapSizes !== false) {
+    mapSizesFn(graph, { attributeKey: mapSizes });
   }
 
   if (layout) {
