@@ -2,7 +2,7 @@
 
 // Deps imports:
 const yargs = require("yargs");
-const render = require("graphology-canvas");
+const seedrandom = require("seedrandom");
 
 // Local imports:
 const layoutFn = require("./layout");
@@ -74,6 +74,11 @@ const seed = argv.seed || undefined;
 loadGraphFn({ sourcePath }, function(err, graph) {
   if (err) throw new Error(err);
 
+  // Randomness and seeds:
+  if (seed) {
+    seedrandom(seed, { global: true });
+  }
+
   // Graph treatments:
   if (colorize !== false) {
     colorizeFn(graph, { attributeKey: colorize, seed });
@@ -84,7 +89,11 @@ loadGraphFn({ sourcePath }, function(err, graph) {
   }
 
   if (layout !== false) {
-    layoutFn(graph, { steps, seed });
+    layoutFn(graph, {
+      steps,
+      seed,
+      groupByAttributeKey: colorize === defaultColorizeKey && colorize
+    });
   }
 
   normalizeFn(graph);
