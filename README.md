@@ -31,5 +31,5 @@ This tool has been developped quite quickly (thanks for all the job previously d
 - Louvain multi-graph support
 - ~~Auto sizes for nodes~~
 - More graph formats (GML, ~~JSON~~...)
-- More image formats (JPG, SVG...)
+- More image formats (JPG, ~~SVG~~...)
 - ...

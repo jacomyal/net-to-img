@@ -10,6 +10,7 @@ const colorizeFn = require("./colorize");
 const mapSizesFn = require("./mapSizes");
 const normalizeFn = require("./normalize");
 const loadGraphFn = require("./loadGraph");
+const saveImageFn = require("./saveImage");
 
 const defaultColorizeKey = colorizeFn.DEFAULT_ATTRIBUTE_KEY;
 const defaultMapSizesKey = mapSizesFn.DEFAULT_ATTRIBUTE_KEY;
@@ -89,7 +90,7 @@ loadGraphFn({ sourcePath }, function(err, graph) {
   normalizeFn(graph);
 
   // Render and save img file:
-  render(
+  saveImageFn(
     graph,
     destPath,
     {
