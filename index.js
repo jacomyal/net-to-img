@@ -81,22 +81,22 @@ loadGraphFn({ sourcePath }, function(err, graph) {
 
   // Graph treatments:
   if (colorize !== false) {
-    colorizeFn(graph, { attributeKey: colorize, seed });
+    graph = colorizeFn(graph, { attributeKey: colorize, seed });
   }
 
   if (mapSizes !== false) {
-    mapSizesFn(graph, { attributeKey: mapSizes });
+    graph = mapSizesFn(graph, { attributeKey: mapSizes });
   }
 
   if (layout !== false) {
-    layoutFn(graph, {
+    graph = layoutFn(graph, {
       steps,
       seed,
       groupByAttributeKey: colorize === defaultColorizeKey && colorize
     });
   }
 
-  normalizeFn(graph);
+  graph = normalizeFn(graph);
 
   // Render and save img file:
   saveImageFn(

@@ -5,7 +5,7 @@ const betweennessCentrality = require("graphology-metrics/centrality/betweenness
  * is given, will first compute betweenness centrality for each node and use
  * those values.
  *
- * Mutates the input graph.
+ * Returns a graph instance (might mutate the input graph though).
  */
 function mapSizes(graph, { attributeKey } = {}) {
   if (attributeKey === mapSizes.DEFAULT_ATTRIBUTE_KEY) {
@@ -21,6 +21,8 @@ function mapSizes(graph, { attributeKey } = {}) {
       graph.setNodeAttribute(node, "size", !isNaN(val) && val >= 0 ? val : 0);
     });
   }
+
+  return graph;
 }
 
 mapSizes.DEFAULT_ATTRIBUTE_KEY = "net-to-img/betweenness-centrality";

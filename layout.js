@@ -2,6 +2,11 @@ const forceAtlas2 = require("graphology-layout-forceatlas2");
 
 const INITIAL_LAYOUT_SIZE = 100;
 
+/**
+ * This function computes node positions with the ForceAtlas2 algorithm.
+ *
+ * Returns a graph instance (might mutate the input graph though).
+ */
 module.exports = function layout(
   graph,
   { seed, steps = 100, groupByAttributeKey }
@@ -46,4 +51,6 @@ module.exports = function layout(
     iterations: steps,
     settings: forceAtlas2.inferSettings(graph)
   });
+
+  return graph;
 };

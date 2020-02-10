@@ -2,7 +2,7 @@
  * This function magically resizes nodes positions and sizes to make the graph
  * appear prettier.
  *
- * Mutates the input graph.
+ * Returns a graph instance (might mutate the input graph though).
  */
 module.exports = function normalize(graph) {
   // Retrieve extrema:
@@ -60,4 +60,6 @@ module.exports = function normalize(graph) {
         ((size - minSize) / (maxSize - minSize)) * (MAX_SIZE - MIN_SIZE)
     );
   });
+
+  return graph;
 };

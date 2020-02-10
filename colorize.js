@@ -1,14 +1,16 @@
 const iwanthue = require("iwanthue");
 const louvain = require("graphology-communities-louvain");
+const { toSimple } = require("graphology-operators");
 
 /**
  * This function colorizes nodes based on a given attribute key if specified,
  * or else looks for communities to colorize with Louvain.
  *
- * Mutates the input graph.
+ * Returns a graph instance (might mutate the input graph though).
  */
 function colorize(graph, { attributeKey, seed } = {}) {
   if (attributeKey === colorize.DEFAULT_ATTRIBUTE_KEY) {
+    graph = toSimple(graph);
     louvain.assign(graph, { attributes: { community: attributeKey } });
   }
 
@@ -29,6 +31,8 @@ function colorize(graph, { attributeKey, seed } = {}) {
   graph.forEachNode((node, attributes) => {
     graph.setNodeAttribute(node, "color", colors[attributes[attributeKey]]);
   });
+
+  return graph;
 }
 
 colorize.DEFAULT_ATTRIBUTE_KEY = "net-to-img/community";
