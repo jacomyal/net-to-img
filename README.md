@@ -27,9 +27,24 @@ net-to-img --help
 This tool has been developped quite quickly (thanks for all the job previously done in the [Graphology](https://github.com/graphology) environment by [Guillaume Plique](http://github.com/yomguithereal)), and it breaks very easily, on a lot of the graph files I tried it on. It could be improved, especially around the following issues:
 
 - Errors management
-- Stronger GraphML parser
-- Louvain multi-graph support
+- ~~Stronger GraphML parser~~
+- ~~Louvain multi-graph support~~
 - ~~Auto sizes for nodes~~
 - More graph formats (GML, ~~JSON~~...)
 - More image formats (JPG, ~~SVG~~...)
 - ...
+
+## Changelog
+
+### v0.2.0
+
+- [#2](https://github.com/jacomyal/net-to-img/issues/2) - Use FA2 [#.inferSettings](https://github.com/graphology/graphology-layout-forceatlas2#infersettings)
+- [#1](https://github.com/jacomyal/net-to-img/issues/1) - Use [iwanthue](https://www.npmjs.com/package/iwanthue) for colors
+- Clearer command options declaration
+- [#7](https://github.com/jacomyal/net-to-img/issues/7) - RNG seeds, refactoring
+- Accept files formatted as JSON for Graphology
+- New option `mapSizes`
+- Better API
+- Export SVG images
+- Better initial FA2 layout
+- [#11](https://github.com/jacomyal/net-to-img/issues/11) - Cast graphs to simple before Louvain
