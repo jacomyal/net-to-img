@@ -1,8 +1,8 @@
 const fs = require("fs");
 const path = require("path");
-const graphml = require("graphml-js");
 const Graph = require("graphology");
 const gexf = require("graphology-gexf");
+const graphml = require("graphology-graphml");
 
 function _loadJSONFile({ sourcePath }, callback) {
   const jsonText = fs.readFileSync(sourcePath);
@@ -19,23 +19,7 @@ function _loadJSONFile({ sourcePath }, callback) {
 }
 
 function _loadGraphMLFile({ sourcePath }, callback) {
-  const graphmlText = fs.readFileSync(sourcePath);
-  const parser = new graphml.GraphMLParser();
-
-  parser.parse(graphmlText, function(err, data) {
-    if (err) return callback(err);
-
-    const graph = new Graph();
-    data.nodes.forEach(node => {
-      graph.addNode(node._id, node._attributes);
-    });
-    data.edges.forEach(edge => {
-      if (!graph.hasEdge(edge._source, edge._target))
-        graph.addEdge(edge._source, edge._target, edge._attributes);
-    });
-
-    callback(err, graph);
-  });
+  callback(null, graphml.parse(Graph, fs.readFileSync(sourcePath, "utf-8")));
 }
 
 function _loadGEXFFile({ sourcePath }, callback) {

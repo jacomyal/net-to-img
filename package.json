@@ -14,11 +14,11 @@
   "author": "Alexis Jacomy",
   "license": "MIT",
   "dependencies": {
-    "graphml-js": "^0.4.0",
     "graphology": "^0.15.1",
     "graphology-canvas": "^0.1.1",
     "graphology-communities-louvain": "^0.1.1",
-    "graphology-gexf": "^0.5.0",
+    "graphology-gexf": "^0.5.1",
+    "graphology-graphml": "^0.1.0",
     "graphology-layout-forceatlas2": "^0.3.1",
     "graphology-metrics": "^1.6.1",
     "graphology-operators": "^0.2.0",
