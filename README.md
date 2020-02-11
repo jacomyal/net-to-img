@@ -36,6 +36,10 @@ This tool has been developped quite quickly (thanks for all the job previously d
 
 ## Changelog
 
+### v0.2.1
+
+- Allow parallel edges in GraphML files
+
 ### v0.2.0
 
 - [#2](https://github.com/jacomyal/net-to-img/issues/2) - Use FA2 [#.inferSettings](https://github.com/graphology/graphology-layout-forceatlas2#infersettings)
