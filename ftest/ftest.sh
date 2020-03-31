@@ -13,5 +13,8 @@ echo
 echo "--> Basic case"
 net-to-img $RESOURCES/arctic.gexf $OUTPUT/arctic.png
 
-echo "--> Testing --no-layout"
+echo "--> Testing '--no-layout'"
 net-to-img --no-layout $RESOURCES/arctic.gexf $OUTPUT/arctic-no-layout.png
+
+echo "--> Testing lib usage"
+node ./ftest/lib-usage.js $OUTPUT/clusters-lib.png
