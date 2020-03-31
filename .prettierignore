@@ -1,7 +1,9 @@
 .idea
 .gitignore
+.npmignore
 .prettierignore
 build
 data
+ftest
 node_modules
 *.txt
