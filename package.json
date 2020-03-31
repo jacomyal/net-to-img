@@ -4,7 +4,7 @@
   "description": "A CLI tool to quickly render a network's topology as an image",
   "main": "index.js",
   "bin": {
-    "net-to-img": "./index.js"
+    "net-to-img": "./cli.js"
   },
   "keywords": [
     "graph",
