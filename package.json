@@ -14,17 +14,17 @@
   "author": "Alexis Jacomy",
   "license": "MIT",
   "dependencies": {
-    "graphology": "^0.15.1",
+    "graphology": "^0.16.1",
     "graphology-canvas": "^0.1.1",
-    "graphology-communities-louvain": "^0.1.1",
+    "graphology-communities-louvain": "^0.2.0",
     "graphology-gexf": "^0.5.1",
     "graphology-graphml": "^0.2.0",
-    "graphology-layout-forceatlas2": "^0.3.1",
-    "graphology-metrics": "^1.6.1",
-    "graphology-operators": "^0.2.0",
+    "graphology-layout-forceatlas2": "^0.4.2",
+    "graphology-metrics": "^1.10.1",
+    "graphology-operators": "^1.0.0",
     "graphology-svg": "^0.1.0",
-    "iwanthue": "^1.3.0",
+    "iwanthue": "^1.4.0",
     "seedrandom": "^3.0.5",
-    "yargs": "^15.1.0"
+    "yargs": "^15.3.1"
   }
 }
