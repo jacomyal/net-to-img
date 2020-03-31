@@ -1,6 +1,6 @@
 {
   "name": "net-to-img",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "A CLI tool and library to quickly render a network's topology as an image",
   "main": "index.js",
   "bin": {

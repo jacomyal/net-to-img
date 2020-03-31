@@ -41,6 +41,20 @@ netToImg(
     if (!err) console.log("Everything went well!");
   }
 );
+
+// To directly pass a graph instance
+netToImg(
+  {
+    graph: myGraph,
+    destPath: "path/to/output/image",
+    options: {
+      layout: false,
+    },
+  },
+  (err) => {
+    if (!err) console.log("Everything went well!");
+  }
+);
 ```
 
 ## Disclaimer
@@ -56,6 +70,10 @@ This tool has been developped quite quickly (thanks for all the job previously d
 - ...
 
 ## Changelog
+
+### v0.4.0
+
+- Adding possibility to directly pass a `graphology` instance
 
 ### v0.3.0
 
