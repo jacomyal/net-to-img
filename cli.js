@@ -59,7 +59,7 @@ const argv = yargs
 function argvToParams() {
   const params = {
     sourcePath: argv._[0],
-    targetPath: argv._[1],
+    destPath: argv._[1],
     options: {},
   };
 

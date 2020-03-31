@@ -14,8 +14,7 @@ function validateParams(params) {
   if (!params.sourcePath)
     throw new Error("net-to-img: expecting a `sourcePath`!");
 
-  if (!params.targetPath)
-    throw new Error("net-to-img: expecting a `targetPath`!");
+  if (!params.destPath) throw new Error("net-to-img: expecting a `destPath`!");
 }
 
 module.exports = function netToImg(params, callback) {
@@ -58,7 +57,7 @@ module.exports = function netToImg(params, callback) {
       graph = layoutFn(graph, {
         steps,
         seed,
-        groupByAttributeKey: colorize === defaultColorizeKey && colorize,
+        groupByAttributeKey: colorize === DEFAULTS.colorize && colorize,
       });
     }
 
