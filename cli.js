@@ -2,18 +2,10 @@
 
 // Deps imports:
 const yargs = require("yargs");
-const seedrandom = require("seedrandom");
 
 // Local imports:
-const layoutFn = require("./layout");
-const colorizeFn = require("./colorize");
-const mapSizesFn = require("./mapSizes");
-const normalizeFn = require("./normalize");
-const loadGraphFn = require("./loadGraph");
-const saveImageFn = require("./saveImage");
-
-const defaultColorizeKey = colorizeFn.DEFAULT_ATTRIBUTE_KEY;
-const defaultMapSizesKey = mapSizesFn.DEFAULT_ATTRIBUTE_KEY;
+const DEFAULTS = require("./defaults");
+const netToImg = require("./");
 
 const argv = yargs
   // Main parameters:
@@ -29,85 +21,55 @@ const argv = yargs
     layout: {
       alias: "l",
       description: "Randomizes layout and applies ForceAtlas 2",
-      default: true
+      default: DEFAULTS.layout,
     },
     steps: {
       alias: "s",
       description: "Number of ForceAtlas 2 iterations to perform",
-      default: 100
+      default: DEFAULTS.steps,
     },
     colorize: {
       alias: "c",
       description:
         "Maps an attribute values to node colors. Uses Louvain communities by default. Use --no-colorize or --no-c to preserve node colors.",
-      default: defaultColorizeKey
+      default: DEFAULTS.colorize,
     },
     "map-sizes": {
       alias: "m",
       description:
         "Maps an attribute values to node sizes. Uses betweenness centrality by default. Use --no-map-sizes or --no-m to preserve node sizes.",
-      default: defaultMapSizesKey
+      default: DEFAULTS.mapSizes,
     },
     seed: {
       description: 'A seed for RNG (set it to "" or use --no-seed to unset it)',
-      default: "net-to-img"
+      default: DEFAULTS.seed,
     },
     width: {
       alias: "w",
       description: "Width of the output image",
-      default: 2048
+      default: DEFAULTS.width,
     },
     height: {
       alias: "h",
       description: "height of the output image",
-      default: 2048
-    }
+      default: DEFAULTS.height,
+    },
   }).argv;
 
-// Arguments and options:
-const [sourcePath, destPath] = argv._;
-const { steps, width, height, colorize, layout } = argv;
-const mapSizes = argv["map-sizes"];
-const seed = argv.seed || undefined;
+function argvToParams() {
+  const params = {
+    sourcePath: argv._[0],
+    targetPath: argv._[1],
+    options: {},
+  };
 
-// Actual program:
-loadGraphFn({ sourcePath }, function(err, graph) {
-  if (err) throw new Error(err);
-
-  // Randomness and seeds:
-  if (seed) {
-    seedrandom(seed, { global: true });
+  for (const k in DEFAULTS) {
+    if (k in argv) params.options[k] = argv[k];
   }
 
-  // Graph treatments:
-  if (colorize !== false) {
-    graph = colorizeFn(graph, { attributeKey: colorize, seed });
-  }
+  return params;
+}
 
-  if (mapSizes !== false) {
-    graph = mapSizesFn(graph, { attributeKey: mapSizes });
-  }
-
-  if (layout !== false) {
-    graph = layoutFn(graph, {
-      steps,
-      seed,
-      groupByAttributeKey: colorize === defaultColorizeKey && colorize
-    });
-  }
-
-  graph = normalizeFn(graph);
-
-  // Render and save img file:
-  saveImageFn(
-    graph,
-    destPath,
-    {
-      width,
-      height
-    },
-    () => {
-      // Process ended (callback is mandatory...)
-    }
-  );
+netToImg(argvToParams(), (err) => {
+  if (err) console.error(err);
 });

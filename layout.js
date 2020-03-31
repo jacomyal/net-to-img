@@ -26,7 +26,7 @@ module.exports = function layout(
     let angle = 0;
     for (const key in groups) {
       const group = groups[key];
-      group.forEach(node => {
+      group.forEach((node) => {
         graph.setNodeAttribute(
           node,
           "x",
@@ -41,7 +41,7 @@ module.exports = function layout(
       });
     }
   } else {
-    graph.forEachNode(node => {
+    graph.forEachNode((node) => {
       graph.setNodeAttribute(node, "x", Math.random() * INITIAL_LAYOUT_SIZE);
       graph.setNodeAttribute(node, "y", Math.random() * INITIAL_LAYOUT_SIZE);
     });
@@ -49,7 +49,7 @@ module.exports = function layout(
 
   forceAtlas2.assign(graph, {
     iterations: steps,
-    settings: forceAtlas2.inferSettings(graph)
+    settings: forceAtlas2.inferSettings(graph),
   });
 
   return graph;

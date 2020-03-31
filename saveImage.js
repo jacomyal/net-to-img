@@ -16,7 +16,7 @@ function _saveSVG(graph, destPath, { width, height, callback }) {
 
 const _exporters = {
   png: _savePNG,
-  svg: _saveSVG
+  svg: _saveSVG,
 };
 
 module.exports = function saveImage(

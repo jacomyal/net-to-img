@@ -29,7 +29,7 @@ function _loadGEXFFile({ sourcePath }, callback) {
 const _parsers = {
   json: _loadJSONFile,
   graphml: _loadGraphMLFile,
-  gexf: _loadGEXFFile
+  gexf: _loadGEXFFile,
 };
 
 /**

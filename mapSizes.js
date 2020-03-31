@@ -10,7 +10,7 @@ const betweennessCentrality = require("graphology-metrics/centrality/betweenness
 function mapSizes(graph, { attributeKey } = {}) {
   if (attributeKey === mapSizes.DEFAULT_ATTRIBUTE_KEY) {
     betweennessCentrality.assign(graph, {
-      attributes: { centrality: attributeKey }
+      attributes: { centrality: attributeKey },
     });
   }
 
