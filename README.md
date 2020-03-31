@@ -27,18 +27,20 @@ net-to-img --help
 You can also use `net-to-img` programmatically if you need to:
 
 ```js
-const netToImg = require('net-to-img');
+const netToImg = require("net-to-img");
 
-netToImg({
-  sourcePath: 'path/to/graph/file',
-  destPath: 'path/to/output/image',
-  options: {
-    layout: false
+netToImg(
+  {
+    sourcePath: "path/to/graph/file",
+    destPath: "path/to/output/image",
+    options: {
+      layout: false,
+    },
+  },
+  (err) => {
+    if (!err) console.log("Everything went well!");
   }
-}, err => {
-  if (!err)
-    console.log('Everything went well!');
-});
+);
 ```
 
 ## Disclaimer

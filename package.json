@@ -27,6 +27,8 @@
     "graphology-metrics": "^1.10.1",
     "graphology-operators": "^1.0.0",
     "graphology-svg": "^0.1.0",
+    "graphology-types": "^0.16.0",
+    "graphology-utils": "^1.7.0",
     "iwanthue": "^1.4.0",
     "seedrandom": "^3.0.5",
     "yargs": "^15.3.1"

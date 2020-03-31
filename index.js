@@ -1,5 +1,6 @@
 // Deps imports:
 const seedrandom = require("seedrandom");
+const isGraph = require("graphology-utils/is-graph");
 
 // Local imports:
 const DEFAULTS = require("./defaults");
@@ -11,8 +12,13 @@ const loadGraphFn = require("./loadGraph");
 const saveImageFn = require("./saveImage");
 
 function validateParams(params) {
-  if (!params.sourcePath)
-    throw new Error("net-to-img: expecting a `sourcePath`!");
+  if (params.graph) {
+    if (!isGraph(params.graph))
+      throw new Error("net-to-img: expecting a valid graphology instance!");
+  } else {
+    if (!params.sourcePath)
+      throw new Error("net-to-img: expecting a `sourcePath`!");
+  }
 
   if (!params.destPath) throw new Error("net-to-img: expecting a `destPath`!");
 }
@@ -35,10 +41,7 @@ module.exports = function netToImg(params, callback) {
     seed = undefined,
   } = options;
 
-  // Actual program:
-  loadGraphFn({ sourcePath }, function (err, graph) {
-    if (err) throw new Error(err);
-
+  function processGraph(graph) {
     // Randomness and seeds:
     if (seed) {
       seedrandom(seed, { global: true });
@@ -79,5 +82,16 @@ module.exports = function netToImg(params, callback) {
         return callback();
       }
     );
-  });
+  }
+
+  // Actual program:
+  if (params.graph) {
+    processGraph(params.graph);
+  } else {
+    loadGraphFn({ sourcePath }, function (err, graph) {
+      if (err) throw new Error(err);
+
+      processGraph(graph);
+    });
+  }
 };
