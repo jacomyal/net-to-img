@@ -4,7 +4,8 @@
   "description": "A CLI tool to quickly render a network's topology as an image",
   "main": "index.js",
   "bin": {
-    "net-to-img": "./cli.js"
+    "net-to-img": "./cli.js",
+    "prettier": "prettier --write \"**\""
   },
   "keywords": [
     "graph",
@@ -26,5 +27,8 @@
     "iwanthue": "^1.4.0",
     "seedrandom": "^3.0.5",
     "yargs": "^15.3.1"
+  },
+  "devDependencies": {
+    "prettier": "^2.0.2"
   }
 }

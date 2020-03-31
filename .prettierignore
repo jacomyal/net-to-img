@@ -1,0 +1,6 @@
+.idea
+.gitignore
+.prettierignore
+build
+data
+node_modules
