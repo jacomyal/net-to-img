@@ -86,6 +86,11 @@ This tool has been developped quite quickly (thanks for all the job previously d
 
 ## Changelog
 
+### v0.5.0
+
+- Revamping IO (`-f/--from`, `-t/--to`, `-o/--output`, stdin support etc.)
+- Fixing SVG output
+
 ### v0.4.0
 
 - Adding possibility to directly pass a `graphology` instance

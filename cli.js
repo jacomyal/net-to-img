@@ -16,13 +16,27 @@ const ARGV = yargs
     "$0 [source]",
     "Render a graph file (gexf, graphml or json) as an image (png or svg).",
     (yargs) => {
-      yargs.positional("source", {
-        describe:
-          "Path to the input graph file (gexf, graphml or json). Will read stdin if absent.",
-      });
+      yargs
+        .positional("source", {
+          describe:
+            "Path to the input graph file (gexf, graphml or json). Will read stdin if absent.",
+        })
+        .example([
+          ["$0 graph.gexf", ":: Converting gexf file to `graph.png`."],
+          [
+            "$0 graph.gexf -o graph.svg",
+            ":: Implicitly converting the graph to SVG.",
+          ],
+          [
+            "cat g.gexf | $0 -f gexf -o graph.png",
+            ":: Reading data from stdin.",
+          ],
+        ]);
     }
   )
+  .showHelpOnFail(false)
   .locale("en")
+  .wrap(Math.min(100, yargs.terminalWidth()))
   // Options:
   .options({
     output: {
@@ -83,11 +97,11 @@ const ARGV = yargs
     if (!argv.source) {
       if (!argv.from)
         throw new Error(
-          "Cannot infer input type from stdin. Please provide -f/--from!"
+          "Cannot infer input type from stdin. Please provide -f/--from!\nBut maybe you just forgot the input file?\nMore info available with --help."
         );
       if (!argv.output)
         throw new Error(
-          "Cannot infer output path from stdin. Please provide -o/--output!"
+          "Cannot infer output path from stdin. Please provide -o/--output!\nBut maybe you just forgot the input file?\nMore info available with --help."
         );
     }
 
