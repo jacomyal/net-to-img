@@ -19,3 +19,10 @@ function createInferFormatFromPath(allowedFormats) {
 
 exports.inferInputFormatFromPath = createInferFormatFromPath(INPUT_FORMATS);
 exports.inferOutputFormatFromPath = createInferFormatFromPath(OUTPUT_FORMATS);
+
+exports.inferOutputPath = function inferOutputPath(inputPath, format) {
+  return path.join(
+    path.dirname(inputPath),
+    path.basename(inputPath, path.extname(inputPath)) + "." + format
+  );
+};

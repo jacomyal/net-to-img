@@ -33,4 +33,18 @@ describe("helpers", function () {
       });
     });
   });
+
+  describe("#.inferOutputPath", function () {
+    it("should correctly infer an output path.", function () {
+      const tests = [
+        ["/home/usr/john/graph.gexf", "png", "/home/usr/john/graph.png"],
+        ["test.graphml", "svg", "test.svg"],
+        ["~/whatever/ok/g.JSON", "png", "~/whatever/ok/g.png"],
+      ];
+
+      tests.forEach(([path, format, inferred]) => {
+        assert.strictEqual(helpers.inferOutputPath(path, format), inferred);
+      });
+    });
+  });
 });

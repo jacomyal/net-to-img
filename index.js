@@ -12,16 +12,16 @@ const loadGraphFn = require("./loadGraph");
 const saveImageFn = require("./saveImage");
 const helpers = require("./helpers");
 
-function validateParams(params) {
+function validateParams(sourcePath, destPath, params) {
   if (params.graph) {
     if (!isGraph(params.graph))
-      throw new Error("net-to-img: expecting a valid graphology instance!");
+      throw new TypeError("net-to-img: expecting a valid graphology instance!");
   } else {
-    if (!params.sourcePath)
-      throw new Error("net-to-img: expecting a `sourcePath`!");
+    if (!sourcePath)
+      throw new TypeError("net-to-img: expecting a `sourcePath`!");
   }
 
-  if (!params.destPath) throw new Error("net-to-img: expecting a `destPath`!");
+  if (!destPath) throw new TypeError("net-to-img: expecting a `destPath`!");
 }
 
 module.exports = function netToImg(params, callback) {
@@ -32,7 +32,8 @@ module.exports = function netToImg(params, callback) {
   callback = callback || Function.prototype;
 
   // Extracting options
-  const { sourcePath, destPath } = params;
+  const sourcePath = params.sourcePath;
+  let destPath = params.destPath;
   const {
     steps,
     width,
@@ -52,15 +53,7 @@ module.exports = function netToImg(params, callback) {
     "net-to-img: could not infer output format!"
   );
 
-  // Inferring formats
-  if (!from && sourcePath) {
-    from = helpers.inferInputFormatFromPath(sourcePath);
-
-    if (!from) return callback(inputFormatError);
-  }
-
-  if (!from && !sourcePath && !params.graph) return callback(inputFormatError);
-
+  // Inferring output format
   if (!to && destPath) {
     to = helpers.inferOutputFormatFromPath(destPath);
 
@@ -69,7 +62,19 @@ module.exports = function netToImg(params, callback) {
 
   if (!to && !destPath) return callback(outputFormatError);
 
-  validateParams(params);
+  // Inferring output path
+  if (!destPath) destPath = helpers.inferOutputPath(sourcePath, to);
+
+  // Inferring input
+  if (!from && sourcePath) {
+    from = helpers.inferInputFormatFromPath(sourcePath);
+
+    if (!from) return callback(inputFormatError);
+  }
+
+  if (!from && !sourcePath && !params.graph) return callback(inputFormatError);
+
+  validateParams(sourcePath, destPath, params);
 
   function processGraph(graph) {
     // Randomness and seeds:

@@ -11,10 +11,14 @@ net-to-img --help
 echo
 
 echo "--> Basic case"
-net-to-img $RESOURCES/arctic.gexf -o $OUTPUT/arctic.png
+net-to-img $RESOURCES/arctic.gexf -o $OUTPUT/basic-arctic.png
 
 echo "--> Testing '--no-layout'"
 net-to-img --no-layout $RESOURCES/arctic.gexf -o $OUTPUT/arctic-no-layout.png
+
+echo "--> Testing without output path"
+cp $RESOURCES/arctic.gexf $OUTPUT
+net-to-img $OUTPUT/arctic.gexf --no-layout
 
 echo "--> Testing lib usage"
 node ./ftest/lib-usage.js $OUTPUT/clusters-lib.png

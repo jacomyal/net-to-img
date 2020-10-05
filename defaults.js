@@ -4,7 +4,7 @@ const DEFAULT_MAP_SIZE_KEY = require("./mapSizes").DEFAULT_ATTRIBUTE_KEY;
 exports.DEFAULTS = {
   // Formats
   from: null,
-  to: null,
+  to: "png",
 
   // Dimensions
   width: 2048,
