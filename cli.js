@@ -4,12 +4,15 @@
 const yargs = require("yargs");
 
 // Local imports:
-const DEFAULTS = require("./defaults").DEFAULTS;
+const defaults = require("./defaults");
 const netToImg = require("./");
+
+const { DEFAULTS, INPUT_FORMATS, OUTPUT_FORMATS } = defaults;
 
 const argv = yargs
   // Main parameters:
   .usage("Usage: $0 [OPTIONS] SOURCE DEST")
+  .locale("en")
   .demandCommand(2, 2)
   .describe(
     "SOURCE",
@@ -21,6 +24,16 @@ const argv = yargs
   )
   // Options:
   .options({
+    from: {
+      alias: "f",
+      description: "Input graph format.",
+      choices: INPUT_FORMATS,
+    },
+    to: {
+      alias: "t",
+      description: "Output image format.",
+      choices: OUTPUT_FORMATS,
+    },
     layout: {
       alias: "l",
       description: "Randomizes layout and applies ForceAtlas 2",

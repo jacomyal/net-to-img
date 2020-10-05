@@ -10,6 +10,7 @@ const mapSizesFn = require("./mapSizes");
 const normalizeFn = require("./normalize");
 const loadGraphFn = require("./loadGraph");
 const saveImageFn = require("./saveImage");
+const helpers = require("./helpers");
 
 function validateParams(params) {
   if (params.graph) {
@@ -27,6 +28,9 @@ module.exports = function netToImg(params, callback) {
   let options = params.options || {};
   options = Object.assign({}, DEFAULTS, options);
 
+  // Just in case the user don't want a callback
+  callback = callback || Function.prototype;
+
   validateParams(params);
 
   // Extracting options
@@ -40,6 +44,32 @@ module.exports = function netToImg(params, callback) {
     layout,
     seed = undefined,
   } = options;
+
+  let { from, to } = options;
+
+  const inputFormatError = new TypeError(
+    "net-to-img: could not infer input format!"
+  );
+  const outputFormatError = new TypeError(
+    "net-to-img: could not infer output format!"
+  );
+
+  // Inferring formats
+  if (!from && sourcePath) {
+    from = helpers.inferInputFormatFromPath(sourcePath);
+
+    if (!from) return callback(inputFormatError);
+  }
+
+  if (!from && !sourcePath && !params.graph) return callback(inputFormatError);
+
+  if (!to && destPath) {
+    to = helpers.inferOutputFormatFromPath(destPath);
+
+    if (!to) return callback(outputFormatError);
+  }
+
+  if (!to && !destPath) return callback(outputFormatError);
 
   function processGraph(graph) {
     // Randomness and seeds:
@@ -71,6 +101,7 @@ module.exports = function netToImg(params, callback) {
       graph,
       destPath,
       {
+        format: to,
         width,
         height,
       },
@@ -88,7 +119,7 @@ module.exports = function netToImg(params, callback) {
   if (params.graph) {
     processGraph(params.graph);
   } else {
-    loadGraphFn({ sourcePath }, function (err, graph) {
+    loadGraphFn({ format: from, sourcePath }, function (err, graph) {
       if (err) throw new Error(err);
 
       processGraph(graph);

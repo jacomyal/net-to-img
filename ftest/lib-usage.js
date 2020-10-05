@@ -8,4 +8,7 @@ const graph = clusters(Graph, {
   clusters: 3
 });
 
-imgToNet({graph, destPath: process.argv[2]});
+imgToNet({graph, destPath: process.argv[2]}, err => {
+  if (err)
+    return console.error(err);
+});

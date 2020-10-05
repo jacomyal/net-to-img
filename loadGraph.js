@@ -1,5 +1,4 @@
 const fs = require("fs");
-const path = require("path");
 const Graph = require("graphology");
 const gexf = require("graphology-gexf");
 const graphml = require("graphology-graphml");
@@ -41,15 +40,10 @@ const _parsers = {
  *   - GraphML (https://en.wikipedia.org/wiki/GraphML)
  *   - JSON for Graphology (https://graphology.github.io/serialization.html)
  */
-module.exports = function loadGraph({ sourcePath }, callback) {
-  const ext = path
-    .extname(sourcePath)
-    .substr(1) // Remove starting dot
-    .toLowerCase();
-
-  if (typeof _parsers[ext] === "function") {
-    _parsers[ext]({ sourcePath }, callback);
+module.exports = function loadGraph({ format, sourcePath }, callback) {
+  if (typeof _parsers[format] === "function") {
+    _parsers[format]({ sourcePath }, callback);
   } else {
-    callback(`File extension ${ext} not recognized.`);
+    callback(new TypeError(`Format ${format} not recognized.`));
   }
 };

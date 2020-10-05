@@ -1,4 +1,3 @@
-const path = require("path");
 const savePNGFile = require("graphology-canvas");
 const saveSVGFile = require("graphology-svg");
 
@@ -22,16 +21,11 @@ const _exporters = {
 module.exports = function saveImage(
   graph,
   destPath,
-  { width, height, callback }
+  { format, width, height, callback }
 ) {
-  const ext = path
-    .extname(destPath)
-    .substr(1) // Remove starting dot
-    .toLowerCase();
-
-  if (typeof _exporters[ext] === "function") {
-    _exporters[ext](graph, destPath, { width, height, callback });
+  if (typeof _exporters[format] === "function") {
+    _exporters[format](graph, destPath, { width, height, callback });
   } else {
-    callback(`File extension ${ext} not recognized.`);
+    callback(new TypeError(`File extension ${format} not recognized.`));
   }
 };
