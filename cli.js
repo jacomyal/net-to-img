@@ -4,7 +4,7 @@
 const yargs = require("yargs");
 
 // Local imports:
-const DEFAULTS = require("./defaults");
+const DEFAULTS = require("./defaults").DEFAULTS;
 const netToImg = require("./");
 
 const argv = yargs
@@ -15,7 +15,10 @@ const argv = yargs
     "SOURCE",
     "Path of the input graph file (accepts .GEXF, .GRAPHML and .JSON files only)"
   )
-  .describe("DEST", "Path of the output file (only .PNG and .SVG supported yet)")
+  .describe(
+    "DEST",
+    "Path of the output file (only .PNG and .SVG supported yet)"
+  )
   // Options:
   .options({
     layout: {

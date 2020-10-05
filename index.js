@@ -3,7 +3,7 @@ const seedrandom = require("seedrandom");
 const isGraph = require("graphology-utils/is-graph");
 
 // Local imports:
-const DEFAULTS = require("./defaults");
+const DEFAULTS = require("./defaults").DEFAULTS;
 const layoutFn = require("./layout");
 const colorizeFn = require("./colorize");
 const mapSizesFn = require("./mapSizes");

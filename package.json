@@ -8,7 +8,9 @@
   },
   "scripts": {
     "ftest": "./ftest/ftest.sh",
-    "prettier": "prettier --write \"**\""
+    "prepublish": "npm test",
+    "prettier": "prettier --write \"**\"",
+    "test": "mocha --recursive test"
   },
   "keywords": [
     "graph",
@@ -35,6 +37,7 @@
   },
   "devDependencies": {
     "graphology-generators": "^0.10.1",
+    "mocha": "^8.1.3",
     "prettier": "^2.0.2"
   }
 }
