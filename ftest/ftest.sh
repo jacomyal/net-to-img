@@ -20,5 +20,8 @@ echo "--> Testing without output path"
 cp $RESOURCES/arctic.gexf $OUTPUT
 net-to-img $OUTPUT/arctic.gexf --no-layout
 
+echo "--> Testing from stdin"
+cat $RESOURCES/arctic.gexf | net-to-img -f gexf --no-layout -o $OUTPUT/arctic-from-stdin.gexf
+
 echo "--> Testing lib usage"
 node ./ftest/lib-usage.js $OUTPUT/clusters-lib.png

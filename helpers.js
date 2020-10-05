@@ -26,3 +26,23 @@ exports.inferOutputPath = function inferOutputPath(inputPath, format) {
     path.basename(inputPath, path.extname(inputPath)) + "." + format
   );
 };
+
+exports.readStdin = function readStdin(callback) {
+  const stdin = process.stdin;
+
+  stdin.setEncoding("utf-8");
+
+  const chunks = [];
+
+  stdin.on("data", (chunk) => {
+    chunks.push(chunk);
+  });
+
+  stdin.on("end", (err) => {
+    if (err) return callback(err);
+
+    return callback(null, chunks.join(""));
+  });
+
+  stdin.resume();
+};

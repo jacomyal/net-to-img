@@ -13,7 +13,12 @@ const saveImageFn = require("./saveImage");
 const helpers = require("./helpers");
 
 function validateParams(sourcePath, destPath, params) {
-  if (params.graph) {
+  if (params.data) {
+    if (!params.options.from)
+      throw new TypeError(
+        "net-to-img: cannot infer input format from raw string data!"
+      );
+  } else if (params.graph) {
     if (!isGraph(params.graph))
       throw new TypeError("net-to-img: expecting a valid graphology instance!");
   } else {
@@ -124,7 +129,10 @@ module.exports = function netToImg(params, callback) {
   if (params.graph) {
     processGraph(params.graph);
   } else {
-    loadGraphFn({ format: from, sourcePath }, function (err, graph) {
+    loadGraphFn({ data: params.data, format: from, sourcePath }, function (
+      err,
+      graph
+    ) {
       if (err) throw new Error(err);
 
       processGraph(graph);

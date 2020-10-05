@@ -6,10 +6,11 @@ const yargs = require("yargs");
 // Local imports:
 const defaults = require("./defaults");
 const netToImg = require("./");
+const helpers = require("./helpers");
 
 const { DEFAULTS, INPUT_FORMATS, OUTPUT_FORMATS } = defaults;
 
-const argv = yargs
+const ARGV = yargs
   // Main parameters:
   .usage(
     "$0 [source]",
@@ -77,22 +78,52 @@ const argv = yargs
       description: "height of the output image",
       default: DEFAULTS.height,
     },
+  })
+  .check((argv) => {
+    if (!argv.source) {
+      if (!argv.from)
+        throw new Error(
+          "Cannot infer input type from stdin. Please provide -f/--from!"
+        );
+      if (!argv.output)
+        throw new Error(
+          "Cannot infer output path from stdin. Please provide -o/--output!"
+        );
+    }
+
+    return true;
   }).argv;
 
-function argvToParams() {
+function argvToParams(callback) {
   const params = {
-    sourcePath: argv.source,
-    destPath: argv.output,
+    sourcePath: ARGV.source,
+    destPath: ARGV.output,
     options: {},
   };
 
   for (const k in DEFAULTS) {
-    if (k in argv) params.options[k] = argv[k];
+    if (k in ARGV) params.options[k] = ARGV[k];
   }
 
-  return params;
+  // Reading from stdin
+  if (!params.sourcePath) {
+    return helpers.readStdin((err, data) => {
+      if (err) return callback(err);
+
+      params.data = data;
+
+      return callback(null, params);
+    });
+  }
+
+  return callback(null, params);
 }
 
-netToImg(argvToParams(), (err) => {
-  if (err) console.error(err);
+// Main process
+argvToParams((err, params) => {
+  if (err) return console.error(err);
+
+  return netToImg(params, (err) => {
+    if (err) return console.error(err);
+  });
 });

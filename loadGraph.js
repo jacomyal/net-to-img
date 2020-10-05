@@ -3,8 +3,8 @@ const Graph = require("graphology");
 const gexf = require("graphology-gexf");
 const graphml = require("graphology-graphml");
 
-function _loadJSONFile({ sourcePath }, callback) {
-  const jsonText = fs.readFileSync(sourcePath);
+function _loadJSONFile({ data, sourcePath }, callback) {
+  const jsonText = data ? data : fs.readFileSync(sourcePath);
   const graph = new Graph();
 
   try {
@@ -17,12 +17,18 @@ function _loadJSONFile({ sourcePath }, callback) {
   callback(null, graph);
 }
 
-function _loadGraphMLFile({ sourcePath }, callback) {
-  callback(null, graphml.parse(Graph, fs.readFileSync(sourcePath, "utf-8")));
+function _loadGraphMLFile({ data, sourcePath }, callback) {
+  callback(
+    null,
+    graphml.parse(Graph, data ? data : fs.readFileSync(sourcePath, "utf-8"))
+  );
 }
 
-function _loadGEXFFile({ sourcePath }, callback) {
-  callback(null, gexf.parse(Graph, fs.readFileSync(sourcePath, "utf-8")));
+function _loadGEXFFile({ data, sourcePath }, callback) {
+  callback(
+    null,
+    gexf.parse(Graph, data ? data : fs.readFileSync(sourcePath, "utf-8"))
+  );
 }
 
 const _parsers = {
@@ -40,9 +46,9 @@ const _parsers = {
  *   - GraphML (https://en.wikipedia.org/wiki/GraphML)
  *   - JSON for Graphology (https://graphology.github.io/serialization.html)
  */
-module.exports = function loadGraph({ format, sourcePath }, callback) {
+module.exports = function loadGraph({ data, format, sourcePath }, callback) {
   if (typeof _parsers[format] === "function") {
-    _parsers[format]({ sourcePath }, callback);
+    _parsers[format]({ data, sourcePath }, callback);
   } else {
     callback(new TypeError(`Format ${format} not recognized.`));
   }

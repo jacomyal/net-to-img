@@ -55,6 +55,21 @@ netToImg(
     if (!err) console.log("Everything went well!");
   }
 );
+
+// Directly passing string data
+netToImg(
+  {
+    data: "<gexf as string>",
+    destPath: "path/to/output/image",
+    options: {
+      from: "gexf",
+      layout: false,
+    },
+  },
+  (err) => {
+    if (!err) console.log("Everything went well!");
+  }
+);
 ```
 
 ## Disclaimer
