@@ -24,6 +24,7 @@
     "graphology": "^0.17.1",
     "graphology-canvas": "^0.1.1",
     "graphology-communities-louvain": "^1.2.0",
+    "graphology-components": "^1.0.1",
     "graphology-gexf": "^0.5.1",
     "graphology-graphml": "^0.2.0",
     "graphology-layout-forceatlas2": "^0.5.1",

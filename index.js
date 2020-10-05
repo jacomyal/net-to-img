@@ -1,6 +1,9 @@
 // Deps imports:
 const seedrandom = require("seedrandom");
 const isGraph = require("graphology-utils/is-graph");
+const subgraph = require("graphology-utils/subgraph");
+const largestConnectedComponent = require("graphology-components")
+  .largestConnectedComponent;
 
 // Local imports:
 const DEFAULTS = require("./defaults").DEFAULTS;
@@ -46,6 +49,7 @@ module.exports = function netToImg(params, callback) {
     colorize,
     mapSizes,
     layout,
+    largestComponent,
     seed = undefined,
   } = options;
 
@@ -87,8 +91,13 @@ module.exports = function netToImg(params, callback) {
       seedrandom(seed, { global: true });
     }
 
-    // Graph treatments:
+    // Keeping only the largest component?
+    if (largestComponent) {
+      graph = subgraph(graph, largestConnectedComponent(graph));
+    }
+
     if (colorize !== false) {
+      // Graph treatments:
       graph = colorizeFn(graph, { attributeKey: colorize, seed });
     }
 

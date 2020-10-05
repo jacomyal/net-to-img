@@ -23,5 +23,8 @@ net-to-img $OUTPUT/arctic.gexf --no-layout
 echo "--> Testing from stdin"
 cat $RESOURCES/arctic.gexf | net-to-img -f gexf --no-layout -o $OUTPUT/arctic-from-stdin.gexf
 
+echo "--> Keeping only largest component"
+net-to-img $RESOURCES/components.json -o $OUTPUT/components.png --largest-component
+
 echo "--> Testing lib usage"
 node ./ftest/lib-usage.js $OUTPUT/clusters-lib.png

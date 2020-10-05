@@ -56,6 +56,11 @@ const ARGV = yargs
         "Output image format. Will be inferred from output file extension if absent.",
       choices: OUTPUT_FORMATS,
     },
+    "largest-component": {
+      description: "Keep only the largest connected component in the output.",
+      type: "boolean",
+      default: DEFAULTS.largestComponent,
+    },
     layout: {
       alias: "l",
       description: "Randomizes layout and applies ForceAtlas 2",

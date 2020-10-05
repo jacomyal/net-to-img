@@ -92,7 +92,8 @@ This tool has been developped quite quickly (thanks for all the job previously d
 
 - Revamping IO (`-f/--from`, `-t/--to`, `-o/--output`, stdin support etc.)
 - Fixing SVG output
-- Adding the `netimg` alias.
+- Adding the `netimg` alias
+- Adding `--largest-component`
 
 ### v0.4.0
 

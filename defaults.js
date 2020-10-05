@@ -19,6 +19,7 @@ exports.DEFAULTS = {
   steps: 100,
 
   // Misc
+  largestComponent: false,
   seed: "net-to-img",
 };
 
