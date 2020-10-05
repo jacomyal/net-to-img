@@ -11,27 +11,34 @@ const { DEFAULTS, INPUT_FORMATS, OUTPUT_FORMATS } = defaults;
 
 const argv = yargs
   // Main parameters:
-  .usage("Usage: $0 [OPTIONS] SOURCE DEST")
+  .usage(
+    "$0 [source]",
+    "Render a graph file (gexf, graphml or json) as an image (png or svg).",
+    (yargs) => {
+      yargs.positional("source", {
+        describe:
+          "Path to the input graph file (gexf, graphml or json). Will read stdin if absent.",
+      });
+    }
+  )
   .locale("en")
-  .demandCommand(2, 2)
-  .describe(
-    "SOURCE",
-    "Path of the input graph file (accepts .GEXF, .GRAPHML and .JSON files only)"
-  )
-  .describe(
-    "DEST",
-    "Path of the output file (only .PNG and .SVG supported yet)"
-  )
   // Options:
   .options({
+    output: {
+      alias: "o",
+      description:
+        "Path to the output image file to create (png or svg). Will be created from the input path if absent.",
+    },
     from: {
       alias: "f",
-      description: "Input graph format.",
+      description:
+        "Input graph format. Will be inferred from input file extension if absent.",
       choices: INPUT_FORMATS,
     },
     to: {
       alias: "t",
-      description: "Output image format.",
+      description:
+        "Output image format. Will be inferred from output file extension if absent.",
       choices: OUTPUT_FORMATS,
     },
     layout: {
@@ -74,8 +81,8 @@ const argv = yargs
 
 function argvToParams() {
   const params = {
-    sourcePath: argv._[0],
-    destPath: argv._[1],
+    sourcePath: argv.source,
+    destPath: argv.output,
     options: {},
   };
 

@@ -31,8 +31,6 @@ module.exports = function netToImg(params, callback) {
   // Just in case the user don't want a callback
   callback = callback || Function.prototype;
 
-  validateParams(params);
-
   // Extracting options
   const { sourcePath, destPath } = params;
   const {
@@ -70,6 +68,8 @@ module.exports = function netToImg(params, callback) {
   }
 
   if (!to && !destPath) return callback(outputFormatError);
+
+  validateParams(params);
 
   function processGraph(graph) {
     // Randomness and seeds:
