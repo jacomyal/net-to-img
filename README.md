@@ -20,6 +20,8 @@ To see the list of all options, run:
 
 ```bash
 net-to-img --help
+# or
+netimg --help
 ```
 
 ## Library usage
@@ -90,6 +92,7 @@ This tool has been developped quite quickly (thanks for all the job previously d
 
 - Revamping IO (`-f/--from`, `-t/--to`, `-o/--output`, stdin support etc.)
 - Fixing SVG output
+- Adding the `netimg` alias.
 
 ### v0.4.0
 

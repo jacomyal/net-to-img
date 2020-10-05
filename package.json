@@ -4,7 +4,8 @@
   "description": "A CLI tool and library to quickly render a network's topology as an image",
   "main": "index.js",
   "bin": {
-    "net-to-img": "./cli.js"
+    "net-to-img": "./cli.js",
+    "netimg": "./cli.js"
   },
   "scripts": {
     "ftest": "./ftest/ftest.sh",
